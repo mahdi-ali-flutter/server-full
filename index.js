@@ -23,7 +23,7 @@ mongo.connect(url1,{useNewUrlParser:true,useUnifiedTopology:true},
   var sch={
     name: String,
     email:String,
-    id:Number
+    password:Number
 }
   const mongomodel = new mongo.model('newcols',sch);
 
@@ -38,6 +38,20 @@ if(err) throw err;
 res.send(val);
 })
   
+});
+
+//
+app.post('/post',async(req,res)=>{
+  console.log("inside post function ");
+
+  const data=new mongomodel({
+    name:req.body.name,
+    email:req.body.email,
+    password:req.body.password
+  });
+  const value =await data.save();
+  res.json(value);
+  console.log(req.body);
 });
 
 app.listen(3000,()=>{
