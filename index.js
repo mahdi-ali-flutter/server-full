@@ -54,6 +54,23 @@ app.post('/post',async(req,res)=>{
   console.log(req.body);
 });
 
+app.delete('/del/:id',(req,res)=>{
+
+  let delid=req.params._id;
+  mongomodel.findOneAndDelete(({id:parseInt(delid)}),(err,docs)=>{
+    //findOneAndDelete
+      if(err){res.send("errorrrrrrrrrrr");
+    }else{
+      if(docs==null){
+        res.send("error docs not found !");
+      }else{
+        res.send(docs);
+      }
+    }
+  })
+
+});
+
 app.listen(3000,()=>{
     console.log(" conected on port 3000... http://localhost:3000");
 })
