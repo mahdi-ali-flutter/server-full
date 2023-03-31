@@ -27,7 +27,7 @@ mongo.connect(url1,{useNewUrlParser:true,useUnifiedTopology:true},
 }
   const mongomodel = new mongo.model('newcols',sch);
 
-
+//get
 app.get('/',(req,res)=>{
    res.send(req.body.email);
 });
@@ -40,7 +40,7 @@ res.send(val);
   
 });
 
-//
+//post
 app.post('/post',async(req,res)=>{
   console.log("inside post function ");
 
@@ -53,23 +53,29 @@ app.post('/post',async(req,res)=>{
   res.json(value);
   console.log(req.body);
 });
-
-app.delete('/del/:id',(req,res)=>{
-
-  let delid=req.params._id;
-  mongomodel.findOneAndDelete(({id:parseInt(delid)}),(err,docs)=>{
-    //findOneAndDelete
-      if(err){res.send("errorrrrrrrrrrr");
-    }else{
-      if(docs==null){
-        res.send("error docs not found !");
-      }else{
-        res.send(docs);
-      }
-    }
-  })
+//delete
+app.delete('/delete/:id',async(req,res)=>{
+  
+  const ID=req.params.id;
+  const result=await mongomodel.deleteOne({_id:ID});
+  res.json({deletedCount:result.deletedCount})
 
 });
+
+//update
+app.put('/update/:id',async(req,res,next)=>{
+const ID=req.params.id;
+const newData={
+  name:req.body.name,
+    email:req.body.email,
+    password:req.body.password
+}
+const result=await mongomodel.findOneAndReplace({_id:ID},newData);
+console.log(result);
+res.json({updatedCount : result.modifiedCount});
+
+});
+
 
 app.listen(3000,()=>{
     console.log(" conected on port 3000... http://localhost:3000");
