@@ -31,13 +31,13 @@ mongo.connect(url1,{useNewUrlParser:true,useUnifiedTopology:true},
 app.get('/',(req,res)=>{
    res.send(req.body.email);
 });
-app.get('/data',(req,res,next)=>{
+
+app.get('/data',async(req,res,next)=>{
 fetchid=req.params.id  ;
-mongomodel.find(({id:fetchid}),(err,val)=>{
+await mongomodel.find(({id:fetchid}),(err,val)=>{
 if(err) throw err;
 res.send(val);
-})
-  
+}) 
 });
 
 //post
