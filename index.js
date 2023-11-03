@@ -120,24 +120,41 @@ app.get('/info_user/:username',(req,res,next)=>{
   )
   .catch((err)=>{res.status(500).send(err);});
 });
+///////////////////////add images by multer
+
+
+const multer=require('multer');
+app.use(express.static(path.join(__dirname,"image")))
+
+const Storage =multer.diskStorage({
+  destination:function (req, file,cb){
+      cb(null,path.join(__dirname,'image'));
+  },
+  filename:function(req,file,cb){
+    image_url=new Date().toISOString().replace(/:/g,"-")+file.originalname;
+      cb(null,image_url);
+  }
+});
+
+const upload=multer({storage:Storage});
 
 ////////////another post to users
 
-app.post('/post_users',async(req,res)=>{
-  console.log("inside post function ");
 
-  const data=new mongoUser({
-    thing_name:req.body.thing_name,
-    username:req.body.username,
-    phone_number:req.body.phone_number,
-    address:req.body.address,
-    price:req.body.price,
-    payment:req.body.payment,
-    remain:req.body.remain
-  });
-  const value =await data.save();
-  res.json(value);
-  console.log(req.body);
+app.post('/post',upload.single("imag_pro"),async(req,res)=>{
+  console.log("inside post function ");
+   
+                const data=new mongomodel({
+                  title_pro:req.body.title_pro,
+                  imag_pro:"https://server-full-5.onrender.com/"+image_url,
+                  price_cash_pro:req.body.price_cash_pro,
+                  price_installments_pro:req.body.price_installments_pro
+                });
+                const value =await data.save();
+                res.json(value);
+                console.log(req.body);
+                console.log(image_url);
+                
 });
 //////update price for user 
 app.put('/update_price_user/:id',async(req,res,next)=>{
