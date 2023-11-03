@@ -1,1 +1,1 @@
-server-full
+after_update
