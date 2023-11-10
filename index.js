@@ -28,7 +28,7 @@ mongo.connect(url1,{useNewUrlParser:true,useUnifiedTopology:true},
     price_installments_pro:Number
 }
   const mongomodel = new mongo.model('product',sch);
-  ///
+  ////////
 
   var users={
     thing_name:String ,
